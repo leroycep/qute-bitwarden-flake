@@ -20,9 +20,13 @@
       ];
     };
     
-    defaultPackage."x86_64-linux" = self.packages."x86_64-linux".qute-bitwarden;
+    packages."x86_64-linux".default = self.packages."x86_64-linux".qute-bitwarden;
     
-    defaultApp."x86_64-linux" = self.packages."x86_64-linux".qute-bitwarden;
+    apps."x86_64-linux".qute-bitwarden = {
+      type = "app";
+      program = "${self.packages.x86_64-linux.qute-bitwarden}/bin/qute-bitwarden";
+    };
+    apps."x86_64-linux".default = self.apps."x86_64-linux".qute-bitwarden;
 
     devShell."x86_64-linux" = nixpkgs.legacyPackages."x86_64-linux".mkShell {
       buildInputs = [
