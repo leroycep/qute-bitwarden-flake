@@ -1,0 +1,2 @@
+- https://pythonhosted.org/an_example_pypi_project/setuptools.html
+- https://blog.hackeriet.no/packaging-python-script-for-nixos/
