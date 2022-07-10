@@ -2,6 +2,7 @@
 
 # Copyright 2017 Chris Braun (cryzed) <cryzed@googlemail.com>
 # Adapted for Bitwarden by Jonathan Haylett (JonnyHaystack) <jonathan@haylett.dev>
+# Adapted for Wayland by LeRoyce Pearson <contact@leroycepearson.dev>
 #
 # This file is part of qutebrowser.
 #
@@ -62,7 +63,7 @@ argument_parser = argparse.ArgumentParser(
 argument_parser.add_argument('url', nargs='?', default=os.getenv('QUTE_URL'))
 argument_parser.add_argument('--dmenu-invocation', '-d', default='fuzzel --dmenu --prompt=Bitwarden',
                              help='Invocation used to execute a dmenu-provider')
-argument_parser.add_argument('--password-prompt-invocation', '-p', default='fuzzel --dmenu --prompt="Master Password" --password --lines=0',
+argument_parser.add_argument('--password-prompt-invocation', '-p', default='pinentry',
                              help='Invocation used to prompt the user for their Bitwarden password')
 argument_parser.add_argument('--no-insert-mode', '-n', dest='insert_mode', action='store_false',
                              help="Don't automatically enter insert mode")
@@ -104,11 +105,20 @@ def ask_password(password_prompt_invocation):
     process = subprocess.run(
         shlex.split(password_prompt_invocation),
         universal_newlines=True,
+        input="GETPIN\n",
         stdout=subprocess.PIPE,
     )
     if process.returncode > 0:
         raise Exception('Could not unlock vault')
-    master_pass = process.stdout.strip()
+
+    master_pass = None
+    for line in process.stdout.splitlines():
+        if (line.startswith("D ")):
+            master_pass = line.removeprefix("D ").strip()
+
+    if (master_pass is None):
+        raise Exception('No password entered')
+
     return subprocess.check_output(
         ['bw', 'unlock', '--raw', master_pass],
         universal_newlines=True,

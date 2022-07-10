@@ -1,2 +1,5 @@
 - https://pythonhosted.org/an_example_pypi_project/setuptools.html
 - https://blog.hackeriet.no/packaging-python-script-for-nixos/
+- https://github.com/Xe/gohello/blob/caf54cdff7d8dd9bd9df4b3b783a72fe75c9a11e/flake.nix#L31-L54
+- https://serokell.io/blog/practical-nix-flakes
+- https://xeiaso.net/blog/nix-flakes-2-2022-02-27

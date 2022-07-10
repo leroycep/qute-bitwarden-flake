@@ -11,15 +11,29 @@
 
       src = ./.;
 
-      propagatedBuildInputs = [ nixpkgs.legacyPackages.x86_64-linux.python3Packages.tldextract ];
+
+      propagatedBuildInputs = [
+        nixpkgs.legacyPackages.x86_64-linux.python3Packages.tldextract
+        nixpkgs.legacyPackages.x86_64-linux.keyutils
+        nixpkgs.legacyPackages.x86_64-linux.fuzzel
+        nixpkgs.legacyPackages.x86_64-linux.pinentry_qt5
+      ];
     };
     
-    defaultPackage."x86_64-linux" = self.packages.x86_64-linux.qute-bitwarden;
+    defaultPackage."x86_64-linux" = self.packages."x86_64-linux".qute-bitwarden;
     
-    defaultApp."x86_64-linux" = {
-      type = "app";
-      program = "${self.packages.x86_64-linux.qute-bitwarden}/bin/qute-bitwarden";
+    defaultApp."x86_64-linux" = self.packages."x86_64-linux".qute-bitwarden;
+
+    devShell."x86_64-linux" = nixpkgs.legacyPackages."x86_64-linux".mkShell {
+      buildInputs = [
+        nixpkgs.legacyPackages.x86_64-linux.python3
+        nixpkgs.legacyPackages.x86_64-linux.python3Packages.tldextract
+        nixpkgs.legacyPackages.x86_64-linux.keyutils
+        nixpkgs.legacyPackages.x86_64-linux.fuzzel
+        nixpkgs.legacyPackages.x86_64-linux.pinentry_qt5
+      ];
     };
+  
 
   };
   
